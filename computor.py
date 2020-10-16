@@ -37,15 +37,20 @@ class Polynomial:
 
         left, right = equation.split("=")
         terms = ["+"] + left.split()
-        proceed(terms, inverse=False)
+        if terms[1] != '0':
+            proceed(terms, inverse=False)
         terms = ["+"] + right.split()
-        proceed(terms, inverse=True)
+        if terms[1] != '0':
+            proceed(terms, inverse=True)
     
     @classmethod
     def print_reduced_form(cls):
         print("Reduced form: ", end="")
-        term = cls.all_terms[0]
-        print(term, end="")
+        try:
+            term = cls.all_terms[0]
+            print(term, end="")
+        except:
+            pass
         for i in range(1, len(cls.all_terms)):
             try:
                 term = cls.all_terms[i]
@@ -64,14 +69,56 @@ class Polynomial:
     
     @classmethod
     def solve(cls):
+        """Solve Linear and Quadratic equations.
+
+        Standard forms
+            Linear:     ax + by = c
+            Quadratic:  ax^2 + bx + c = 0
+        
+        Quadratic formula:
+            -b +- sqrt(b^2 - 4ac)
+        x = —————————————————————
+                    2a
+        """
+
         if cls.degree > 2:
             sys.exit("The polynomial degree is strictly greater than 2, I can't solve.")
+        
+        a, b, c = 0, 0, 0
+        if cls.degree == 0:
+            x = cls.all_terms[0].coefficient
+            print(x)
+        elif cls.degree == 1:
+            a = cls.all_terms[1].coefficient
+            b = cls.all_terms[0].coefficient
+            print(f"The solution is:\n{-b / a}")
+        elif cls.degree == 2:
+            a = cls.all_terms[2].coefficient            
+            b = cls.all_terms[1].coefficient
+            c = cls.all_terms[0].coefficient
+            discriminant = (b ** 2) - (4 * a * c)
+            two_a = 2 * a
+
+            if discriminant > 0:
+                print("Discriminant is strictly positive, the two solutions are:")
+            elif discriminant < 0:
+                print("Discriminant is strictly negative, the two solutions are:")
+            else:
+                print(f"Discriminant is 0, the solution is:{-b / two_a}")
+                sys.exit(0)
+
+            sqrt = discriminant ** 0.5
+            x1 = (-b - sqrt) / two_a
+            x2 = (-b + sqrt) / two_a
+            print(round(x1, 6))
+            print(round(x2, 6))
 
 
 def main():
     Polynomial.get_terms(sys.argv[1])
     Polynomial.print_reduced_form()
     Polynomial.print_degree()
+    Polynomial.solve()
 
 if __name__ == "__main__":
     main()
