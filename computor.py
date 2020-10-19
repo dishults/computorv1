@@ -9,7 +9,10 @@ class Polynomial:
 
     def __init__(self, sign, coefficient, variable, exponent, inverse=False):
         """Example -- '+', '5', 'X', '0'"""
-        self.coefficient = float(sign + coefficient)
+        try:
+            self.coefficient = float(sign + coefficient)
+        except:
+            self.coefficient = float(coefficient)
         self.variable = variable
         self.exponent = int(exponent)
         Polynomial.degree = max([self.exponent, Polynomial.degree])
@@ -37,10 +40,10 @@ class Polynomial:
 
         left, right = equation.split("=")
         terms = ["+"] + left.split()
-        if terms[1] != '0':
+        if not (terms[1] == '0' and len(terms) == 2):
             proceed(terms, inverse=False)
         terms = ["+"] + right.split()
-        if terms[1] != '0':
+        if not (terms[1] == '0' and len(terms) == 2):
             proceed(terms, inverse=True)
     
     @classmethod
@@ -48,7 +51,10 @@ class Polynomial:
         print("Reduced form: ", end="")
         try:
             term = cls.all_terms[0]
-            print(term, end="")
+            if term.coefficient < 0:
+                print(f"-{term}", end="")
+            else:
+                print(term, end="")
         except:
             pass
         for i in range(1, len(cls.all_terms)):
@@ -91,7 +97,14 @@ class Polynomial:
         elif cls.degree == 1:
             a = cls.all_terms[1].coefficient
             b = cls.all_terms[0].coefficient
-            print(f"The solution is:\n{-b / a}")
+            print(f"The solution is:")
+            if b == 0:
+                print(0)
+            else:
+                try:
+                    print(-b / a)
+                except:
+                    print("The eqution has no solution")
         elif cls.degree == 2:
             a = cls.all_terms[2].coefficient            
             b = cls.all_terms[1].coefficient
@@ -110,8 +123,11 @@ class Polynomial:
             sqrt = discriminant ** 0.5
             x1 = (-b - sqrt) / two_a
             x2 = (-b + sqrt) / two_a
-            print(round(x1, 6))
-            print(round(x2, 6))
+            try:
+                print(round(x1, 6))
+                print(round(x2, 6))
+            except:
+                print("The eqution has no real solutions")
 
 
 def main():
