@@ -75,59 +75,71 @@ class Polynomial:
     
     @classmethod
     def solve(cls):
-        """Solve Linear and Quadratic equations.
+        """Solve Linear and Quadratic equations."""
 
-        Standard forms
-            Linear:     ax + by = c
-            Quadratic:  ax^2 + bx + c = 0
+        if cls.degree > 2:
+            sys.exit("The polynomial degree is strictly greater than 2, I can't solve.")
         
-        Quadratic formula:
+        if cls.degree == 0:
+            """n * X^0"""
+            
+            n = cls.all_terms[0].coefficient
+            if n != 0:
+                sys.exit("The eqution has no solution")
+            print("Every real number is a solution")
+
+        elif cls.degree == 1:
+            """b * X^0 + a * X^1 = 0"""
+
+            a = cls.all_terms[1].coefficient
+            b = cls.all_terms[0].coefficient
+            print("The solution is:")
+            cls.linear_formula(a, b)
+
+        elif cls.degree == 2:
+            """c * X^0 + b * X^1 + a * X^2 = 0"""
+
+            a = cls.all_terms[2].coefficient
+            b = cls.all_terms[1].coefficient
+            c = cls.all_terms[0].coefficient
+            discriminant = (b ** 2) - (4 * a * c)
+
+            if discriminant < 0:
+                sys.exit("Discriminant is strictly negative."
+                         + "\nThe eqution has no real solutions")
+            elif discriminant == 0:
+                print("Discriminant is 0, the solution is:")
+                cls.linear_formula(2 * a, b)
+            else:
+                print("Discriminant is strictly positive, the two solutions are:")
+                cls.quadratic_formula(2 * a, b, discriminant)
+    
+    @staticmethod
+    def linear_formula(a, b):
+        """x = -b / a"""
+
+        if b == 0 and a == 0:
+            print("Every real number is a solution")
+        elif a == 0:
+            sys.exit("The eqution has no solution")
+        elif b == 0:
+            print(0)
+        else:
+            print(-b / a)
+    
+    @staticmethod
+    def quadratic_formula(two_a, b, discriminant):
+        """
             -b +- sqrt(b^2 - 4ac)
         x = —————————————————————
                     2a
         """
 
-        if cls.degree > 2:
-            sys.exit("The polynomial degree is strictly greater than 2, I can't solve.")
-        
-        a, b, c = 0, 0, 0
-        if cls.degree == 0:
-            x = cls.all_terms[0].coefficient
-            print(x)
-        elif cls.degree == 1:
-            a = cls.all_terms[1].coefficient
-            b = cls.all_terms[0].coefficient
-            print(f"The solution is:")
-            if b == 0:
-                print(0)
-            else:
-                try:
-                    print(-b / a)
-                except:
-                    print("The eqution has no solution")
-        elif cls.degree == 2:
-            a = cls.all_terms[2].coefficient            
-            b = cls.all_terms[1].coefficient
-            c = cls.all_terms[0].coefficient
-            discriminant = (b ** 2) - (4 * a * c)
-            two_a = 2 * a
-
-            if discriminant > 0:
-                print("Discriminant is strictly positive, the two solutions are:")
-            elif discriminant < 0:
-                print("Discriminant is strictly negative, the two solutions are:")
-            else:
-                print(f"Discriminant is 0, the solution is:{-b / two_a}")
-                sys.exit(0)
-
-            sqrt = discriminant ** 0.5
-            x1 = (-b - sqrt) / two_a
-            x2 = (-b + sqrt) / two_a
-            try:
-                print(round(x1, 6))
-                print(round(x2, 6))
-            except:
-                print("The eqution has no real solutions")
+        sqrt = discriminant ** 0.5
+        x1 = (-b - sqrt) / two_a
+        x2 = (-b + sqrt) / two_a
+        print(round(x1, 6))
+        print(round(x2, 6))
 
 
 def main():
