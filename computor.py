@@ -15,7 +15,6 @@ class Polynomial:
             self.coefficient = float(coefficient)
         self.variable = variable
         self.exponent = int(exponent)
-        Polynomial.degree = max([self.exponent, Polynomial.degree])
         if inverse:
             self.coefficient *= -1
     
@@ -71,7 +70,13 @@ class Polynomial:
     
     @classmethod
     def print_degree(cls):
-        print("Polynomial degree: ", Polynomial.degree)
+        terms = cls.all_terms
+        try:
+            exponents = [terms[t].exponent for t in terms.keys() if terms[t].coefficient != 0]
+            cls.degree = max(exponents)
+        except:
+            cls.degree = 0
+        print("Polynomial degree: ", cls.degree)
     
     @classmethod
     def solve(cls):
@@ -94,7 +99,7 @@ class Polynomial:
             a = cls.all_terms[1].coefficient
             b = cls.all_terms[0].coefficient
             print("The solution is:")
-            cls.linear_formula(a, b)
+            linear_formula(a, b)
 
         elif cls.degree == 2:
             """c * X^0 + b * X^1 + a * X^2 = 0"""
@@ -103,46 +108,54 @@ class Polynomial:
             b = cls.all_terms[1].coefficient
             c = cls.all_terms[0].coefficient
             discriminant = (b ** 2) - (4 * a * c)
+            two_a = 2 * a
 
-            if discriminant < 0:
-                sys.exit("Discriminant is strictly negative."
-                         + "\nThe eqution has no real solutions")
-            elif discriminant == 0:
+            if discriminant == 0:
                 print("Discriminant is 0, the solution is:")
-                cls.linear_formula(2 * a, b)
-            else:
+                linear_formula(two_a, b)
+            elif discriminant > 0:
                 print("Discriminant is strictly positive, the two solutions are:")
-                cls.quadratic_formula(2 * a, b, discriminant)
-    
-    @staticmethod
-    def linear_formula(a, b):
-        """x = -b / a"""
+                quadratic_formula(two_a, b, discriminant)
+            else:
+                print("Discriminant is strictly negative, the two complex solutions are:")
+                discriminant *= -1
+                quadratic_formula(two_a, b, discriminant, simple=False)
 
-        if b == 0 and a == 0:
-            print("Every real number is a solution")
-        elif a == 0:
-            sys.exit("The eqution has no solution")
-        elif b == 0:
-            print(0)
-        else:
-            print(-b / a)
-    
-    @staticmethod
-    def quadratic_formula(two_a, b, discriminant):
-        """
-            -b +- sqrt(b^2 - 4ac)
-        x = —————————————————————
-                    2a
-        """
 
-        sqrt = discriminant ** 0.5
+def linear_formula(a, b):
+    """x = -b / a"""
+
+    if b == 0 and a == 0:
+        print("Every real number is a solution")
+    elif a == 0:
+        sys.exit("The eqution has no solution")
+    elif b == 0:
+        print(0)
+    else:
+        print(-b / a)
+    
+def quadratic_formula(two_a, b, discriminant, simple=True):
+    """
+        -b +- sqrt(b^2 - 4ac)
+    x = —————————————————————
+                2a
+    """
+
+    sqrt = discriminant ** 0.5
+    if simple:
         x1 = (-b - sqrt) / two_a
         x2 = (-b + sqrt) / two_a
         print(round(x1, 6))
         print(round(x2, 6))
-
+    else:
+        real = -b / two_a
+        imaginary = sqrt / two_a
+        print(f"{round(real, 6)} - {round(imaginary, 6)}i")
+        print(f"{round(real, 6)} + {round(imaginary, 6)}i")
 
 def main():
+    if len(sys.argv) != 2:
+        sys.exit('Usage: ./computor.py "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"')
     Polynomial.get_terms(sys.argv[1])
     Polynomial.print_reduced_form()
     Polynomial.print_degree()
