@@ -98,7 +98,6 @@ class Polynomial:
 
             a = cls.all_terms[1].coefficient
             b = cls.all_terms[0].coefficient
-            print("The solution is:")
             linear_formula(a, b)
 
         elif cls.degree == 2:
@@ -111,20 +110,30 @@ class Polynomial:
             two_a = 2 * a
 
             if discriminant == 0:
-                print("Discriminant is 0, the solution is:")
+                print("\033[1mDiscriminant is 0\033[0m")
                 linear_formula(two_a, b)
-            elif discriminant > 0:
-                print("Discriminant is strictly positive, the two solutions are:")
-                quadratic_formula(two_a, b, discriminant)
             else:
-                print("Discriminant is strictly negative, the two complex solutions are:")
-                discriminant *= -1
-                quadratic_formula(two_a, b, discriminant, simple=False)
+                print("\nQuadratic Formula:")
+                print(quadratic_formula.__doc__)
+                print("a = ", a)
+                print("b = ", b)
+                print("c = ", c)
+                print("2a = ", two_a)
+                print("discriminant (b^2 - 4ac) = ", discriminant)
+                if discriminant > 0:
+                    print("\n\033[1mDiscriminant is strictly positive.\033[0m")
+                    quadratic_formula(two_a, b, discriminant)
+                else:
+                    print("\n\033[1mDiscriminant is strictly negative.\033[0m",
+                          "\nSo we would have to calculate complex solutions",
+                          "with real and imaginary parts")
+                    quadratic_formula(two_a, b, discriminant, simple=False)
 
 
 def linear_formula(a, b):
     """x = -b / a"""
 
+    print("The solution is:")
     if b == 0 and a == 0:
         print("Every real number is a solution")
     elif a == 0:
@@ -140,18 +149,27 @@ def quadratic_formula(two_a, b, discriminant, simple=True):
     x = —————————————————————
                 2a
     """
-
-    sqrt = discriminant ** 0.5
     if simple:
+        sqrt = discriminant ** 0.5
+        print("sqrt (discriminant ** 0.5) =", sqrt)
         x1 = (-b - sqrt) / two_a
         x2 = (-b + sqrt) / two_a
-        print(round(x1, 6))
-        print(round(x2, 6))
+        print("\nThe two solutions are:")
+        print("x1 (-b - sqrt) / 2a =\033[1m", round(x1, 6), "\033[0m")
+        print("x2 (-b + sqrt) / 2a =\033[1m", round(x2, 6), "\033[0m")
     else:
+        discriminant *= -1
+        print(f"\n=> convert discriminant (b^2 - 4ac) to positive = {discriminant}")
+        sqrt = discriminant ** 0.5
+        print("=> calculate sqrt (discriminant ** 0.5) =", sqrt)
         real = -b / two_a
+        print("=> calculate real part (-b / two_a) = ", real)
         imaginary = sqrt / two_a
-        print(f"{round(real, 6)} - {round(imaginary, 6)}i")
-        print(f"{round(real, 6)} + {round(imaginary, 6)}i")
+        print("=> calculate imaginary part (sqrt / 2a) = ", imaginary)
+        print("\nThe two complex solutions are:")
+        print(f"real - imaginary = \033[1m{round(real, 6)} - {round(imaginary, 6)}i\033[0m")
+        print(f"real + imaginary = \033[1m{round(real, 6)} + {round(imaginary, 6)}i\033[0m")
+
 
 def main():
     if len(sys.argv) != 2:

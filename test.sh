@@ -26,6 +26,7 @@ if [ $1 = "all" ]; then
         echo ""
     done
 else
-    echo "${TESTS[$1]}"
-    ./computor.py "${TESTS[$1]}"
+    test=${TESTS[$1 - 4]}
+    echo "$test"
+    ./computor.py "$test"
 fi
