@@ -86,23 +86,24 @@ class Polynomial:
             sys.exit("The polynomial degree is strictly greater than 2, I can't solve.")
         
         if cls.degree == 0:
-            """n * X^0"""
-            
+            """n * X^0"""            
             n = cls.all_terms[0].coefficient
             if n != 0:
                 sys.exit("The eqution has no solution")
             print("Every real number is a solution")
 
         elif cls.degree == 1:
-            """b * X^0 + a * X^1 = 0"""
-
+            print("b * X^0 + a * X^1 = 0")
             a = cls.all_terms[1].coefficient
             b = cls.all_terms[0].coefficient
+            print("\nLinear Formula:")
+            print(linear_formula.__doc__)
+            print("a = ", a)
+            print("b = ", b)
             linear_formula(a, b)
 
         elif cls.degree == 2:
-            """c * X^0 + b * X^1 + a * X^2 = 0"""
-
+            print("c * X^0 + b * X^1 + a * X^2 = 0")
             a = cls.all_terms[2].coefficient
             b = cls.all_terms[1].coefficient
             c = cls.all_terms[0].coefficient
@@ -131,9 +132,11 @@ class Polynomial:
 
 
 def linear_formula(a, b):
-    """x = -b / a"""
+    """
+    x = -b / a
+    """
 
-    print("The solution is:")
+    print("\nThe solution is:")
     if b == 0 and a == 0:
         print("Every real number is a solution")
     elif a == 0:
@@ -141,7 +144,7 @@ def linear_formula(a, b):
     elif b == 0:
         print(0)
     else:
-        print(-b / a)
+        print(f"\033[1m{-b / a}\033[0m")
     
 def quadratic_formula(two_a, b, discriminant, simple=True):
     """

@@ -21,12 +21,12 @@ TESTS=(
 
 if [ $1 = "all" ]; then
     for test in "${TESTS[@]}"; do
-        echo "$test"
+        echo -e "\033[32m$test\033[0m"
         ./computor.py "$test"
         echo ""
     done
 else
     test=${TESTS[$1 - 4]}
-    echo "$test"
+    echo -e "\033[32m$test\033[0m"
     ./computor.py "$test"
 fi
