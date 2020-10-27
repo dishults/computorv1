@@ -86,7 +86,7 @@ class Polynomial:
             sys.exit("The polynomial degree is strictly greater than 2, I can't solve.")
         
         if cls.degree == 0:
-            """n * X^0"""            
+            """n * X^0 = 0"""            
             n = cls.all_terms[0].coefficient
             if n != 0:
                 sys.exit("The eqution has no solution")
@@ -110,17 +110,18 @@ class Polynomial:
             discriminant = (b ** 2) - (4 * a * c)
             two_a = 2 * a
 
+            print("\nQuadratic Formula:")
+            print(quadratic_formula.__doc__)
+            print("a = ", a)
+            print("b = ", b)
+            print("c = ", c)
+            print("2a = ", two_a)
+            print("discriminant (b^2 - 4ac) = ", discriminant)
             if discriminant == 0:
-                print("\033[1mDiscriminant is 0\033[0m")
+                print("\n\033[1mDiscriminant is 0\033[0m")
+                print("To solve we would have to do: x = -b / 2a")
                 linear_formula(two_a, b)
             else:
-                print("\nQuadratic Formula:")
-                print(quadratic_formula.__doc__)
-                print("a = ", a)
-                print("b = ", b)
-                print("c = ", c)
-                print("2a = ", two_a)
-                print("discriminant (b^2 - 4ac) = ", discriminant)
                 if discriminant > 0:
                     print("\n\033[1mDiscriminant is strictly positive.\033[0m")
                     quadratic_formula(two_a, b, discriminant)
